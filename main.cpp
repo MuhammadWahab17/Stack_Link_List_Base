@@ -1,97 +1,124 @@
 //
 //  main.cpp
-//  Stack_ADT_LL
+//  Stack | STL
 //
-//  Created by Ch Muhammad Wahab on 6/11/2020.
-//  Copyright © 2020 Ch Muhammad Wahab. All rights reserved.
+//  Created by  Muhammad Wahab on 03/05/2021.
+//  Copyright © 2021  Muhammad Wahab. All rights reserved.
 //
 
-#include<iostream>
-#include<fstream>
+#include <iostream>
 using namespace std;
+//LIFO //FILO
+// 0 1 2 3 4 5
+
+//push()
+//top()
+//pop()
+//empty()
+//full()
+//copy constructor
+//assignment operator (=)
+//destructor
 
 template<class t>
-struct Node
-{
+struct node{
     t data;
-    struct Node<t>* next;
+    node* next;
+    node(){}
+    node(t val, node* n=NULL){
+        data = val;
+        next = n;
+    }
 };
 template<class t>
 class stack{
-struct Node<t>* topptr;
-
+    node<t>* head;
 public:
     stack(){
-        topptr=NULL;
+        head = NULL;
     }
-void push(const t &data)
-{
-    struct Node<t>* temp;
-    temp = new Node<t>;
-    if (!temp)
-    {
-        cout << "\nHeap Overflow";
-        exit(1);
+    stack(const stack& obj){
+        head = NULL;
+        operator=(obj);
     }
-    temp->data = data;
-    temp->next = topptr;
-    topptr = temp;
-}
-
-bool empty() const
-{
-    return topptr == NULL;
-}
-int top() const
-{
-        return topptr->data;
-}
-void pop()
-{
-    struct Node<t>* temp;
-    if (topptr == NULL)
-    {
-        cout << "\nStack Underflow" << endl;
-        exit(1);
-    }
-    else
-    {
-        temp = topptr;
-        topptr = topptr->next;
-        delete temp;
-    }
-    
-}
-    void stack_status(){
-        cout<<"Current Status of Stack\n";
-        struct Node<t> *temp;
-        temp=topptr;
-        if(temp==NULL){
-            cout<<"Stack Underflow!\n";
+    void operator=(const stack& obj){
+        node<t>* h = obj.head;
+        stack s;
+        while(h!=NULL){
+            s.push(h->data);
+            h=h->next;
         }
-        while(temp!=NULL){
-            cout<<temp->data<<endl;
-            temp=temp->next;
+        while(!s.empty()){
+            push(s.top());
+            s.pop();
         }
     }
     ~stack(){
-        while (!empty()) {
+        while(!empty())
             pop();
-        }
     }
+    void push(const t &val){
+        if(full())
+            throw "Stack Overflow";
+        node<t>* temp = new node<t>(val,head);
+        head = temp;
+    }
+    t top() const{
+        return head->data;
+    }
+    void pop(){
+        if(empty())
+            throw "Stack underflow";
+        node<t>* temp = head;
+        head = head->next;
+        delete temp;
+    }
+    bool full(){
+        node<t>* temp = new node<t>();
+        if(temp){
+            return false;
+        }
+        else
+            return true;
+    }
+    bool empty(){
+        if(head==NULL){
+            return true;
+        }
+        else
+            return false;
+    }
+    
 };
 
 
-
-int main(int argc,char** argv)
-{
+int main(int argc, const char * argv[]) {
     stack<int> s;
-    for (int i=0; i<10; i++) {
-        s.push(i+1);
-    }
-    while(!s.empty()){
-        cout<<s.top()<<" ";
+    s.push(10);
+    s.push(20);
+    s.push(30);
+    stack<int> s2(s);
+    while (!s.empty()) {
+        cout<<s.top();
         s.pop();
+    }
+    cout<<endl;
+    
+    while (!s2.empty()) {
+        cout<<s2.top();
+        s2.pop();
     }
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
